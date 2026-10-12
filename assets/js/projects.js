@@ -57,7 +57,7 @@ window.PROJECTS = [
       ["Status", "Complete"]
     ],
     tags: ["ESP32", "C/C++", "ESP-NOW", "H-bridge", "IR sensor", "OLED"],
-    repo: "",               // GitHub repository name, e.g. "esp32-rc-car" ("" hides the GitHub buttons)
+    repo: "esp32-rc-car",               // GitHub repository name ("" hides the GitHub buttons)
     thumb: "thumb.jpg"
   },
 ];

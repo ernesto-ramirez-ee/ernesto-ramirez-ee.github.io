@@ -74,7 +74,7 @@
       var code = p.repo
         ? '<div class="btns" style="margin-top:20px"><a class="btn primary" href="' + SITE.codeRepo + esc(p.repo) +
           '" target="_blank" rel="noopener">View code &amp; files on GitHub →</a></div>'
-        : "";
+        : (p.codeNote ? '<p class="code-note">' + esc(p.codeNote) + "</p>" : "");
       main.insertBefore(el(
         '<header class="project-hero">' +
           '<a class="back" href="' + root + 'index.html#projects">← All projects</a>' +

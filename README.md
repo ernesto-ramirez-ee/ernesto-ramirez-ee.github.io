@@ -26,7 +26,7 @@ Project metadata (title, summary, tags, dates, GitHub repository name, display o
 2. Add an entry to `assets/js/projects.js` with the same `slug`.
 3. Set `data-project="<slug>"` in the new page and write the content.
 
-The card uses `projects/<slug>/thumb.jpg` (16:9). `repo` is the repository name under github.com/ernesto-ramirez-ee; leave it empty to hide the GitHub links.
+The card uses `projects/<slug>/thumb.jpg` (16:9). `repo` is the repository name under github.com/ernesto-ramirez-ee; leave it empty to hide the GitHub links. With no repo, an optional `codeNote` is shown in their place.
 
 ## Related
 

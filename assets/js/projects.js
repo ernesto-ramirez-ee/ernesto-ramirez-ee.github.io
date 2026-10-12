@@ -25,6 +25,7 @@ window.PROJECTS = [
     ],
     tags: ["Semtech SX1281", "ADALM-Pluto SDR", "Python", "802.11a/g OFDM", "LoRa / FLRC"],
     repo: "",               // GitHub repository name, e.g. "lora-wifi-coexistence" ("" hides the GitHub buttons)
+    codeNote: "Research in progress. Code and data aren't public yet.",   // shown instead of the GitHub button when repo is ""
     thumb: "thumb.jpg"
   },
   {

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>137 MHz Satellite Receiver &amp; LRPT Decoder | Ernesto Ramirez</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<!-- data-project must match this project's "slug" in assets/js/projects.js.
+     The menu, title, intro, tags, GitHub button, next/previous links and footer
+     are all filled in automatically from that entry. -->
+<body data-root="../../" data-project="vhf-receiver">
+<main class="wrap">
+
+  <!-- Key numbers shown as cards under the title. Copy/delete <div class="stat"> blocks as needed. -->
+  <div class="stats"><div class="stat"><div class="v">137 MHz</div><div class="k">VHF satellite downlink band</div></div><div class="stat"><div class="v">3-pole</div><div class="k">Direct-coupled Chebyshev bandpass</div></div><div class="stat"><div class="v">0.10 dB</div><div class="k">Passband ripple</div></div><div class="stat"><div class="v">Monte Carlo</div><div class="k">Tolerance analysis before fabrication</div></div></div>
+
+  <!-- The write-up. Images live in this same folder, so just use src="photo.jpg". -->
+  <article class="prose">
+
+    <h2>Goal</h2>
+    <p>Receive and decode LRPT (Low Rate Picture Transmission) imagery from Meteor-M2, starting from a custom-designed front end rather than an off-the-shelf filter and amplifier.</p>
+
+    <h2>System overview</h2>
+    <div style="overflow-x:auto"><svg viewBox="0 0 1000 96" role="img" aria-label="Antenna to Front-end PCB to RTL-SDR V4 to Python DSP to Image" style="width:100%;min-width:620px;height:auto;margin:22px 0;font-family:var(--mono)"><defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3ee6a8"/></marker></defs><rect x="0.0" y="14" width="172.8" height="68" rx="8" fill="#131b24" stroke="#2a3a4a"/><text x="86.4" y="42.0" fill="#d8e1ea" font-size="15" text-anchor="middle">Antenna</text><text x="86.4" y="64.0" fill="#8a9aab" font-size="12.5" text-anchor="middle">dipole / QFH</text><line x1="175.8" y1="48.0" x2="202.8" y2="48.0" stroke="#3ee6a8" stroke-width="1.8" marker-end="url(#ar)"/><rect x="206.8" y="14" width="172.8" height="68" rx="8" fill="#131b24" stroke="#2a3a4a"/><text x="293.2" y="42.0" fill="#d8e1ea" font-size="15" text-anchor="middle">Front-end PCB</text><text x="293.2" y="64.0" fill="#8a9aab" font-size="12.5" text-anchor="middle">LNA + BPF</text><line x1="382.6" y1="48.0" x2="409.6" y2="48.0" stroke="#3ee6a8" stroke-width="1.8" marker-end="url(#ar)"/><rect x="413.6" y="14" width="172.8" height="68" rx="8" fill="#131b24" stroke="#2a3a4a"/><text x="500.0" y="42.0" fill="#d8e1ea" font-size="15" text-anchor="middle">RTL-SDR V4</text><text x="500.0" y="64.0" fill="#8a9aab" font-size="12.5" text-anchor="middle">raw IQ</text><line x1="589.4" y1="48.0" x2="616.4" y2="48.0" stroke="#3ee6a8" stroke-width="1.8" marker-end="url(#ar)"/><rect x="620.4" y="14" width="172.8" height="68" rx="8" fill="#131b24" stroke="#2a3a4a"/><text x="706.8" y="42.0" fill="#d8e1ea" font-size="15" text-anchor="middle">Python DSP</text><text x="706.8" y="64.0" fill="#8a9aab" font-size="12.5" text-anchor="middle">QPSK demod</text><line x1="796.2" y1="48.0" x2="823.2" y2="48.0" stroke="#3ee6a8" stroke-width="1.8" marker-end="url(#ar)"/><rect x="827.2" y="14" width="172.8" height="68" rx="8" fill="#131b24" stroke="#2a3a4a"/><text x="913.6" y="42.0" fill="#d8e1ea" font-size="15" text-anchor="middle">Image</text><text x="913.6" y="64.0" fill="#8a9aab" font-size="12.5" text-anchor="middle">weather</text></svg></div>
+
+    <h2>Front-end design</h2>
+    <p>The board combines a <code>PGA-103+</code> low-noise amplifier with a 3-pole, direct-coupled Chebyshev bandpass filter using series-capacitor coupling and 0.10 dB passband ripple. The filter keeps strong out-of-band signals, like FM broadcast and pagers, from overloading the receiver, and the LNA sets the noise figure for the whole chain.</p>
+    <figure><a href="schematic.jpg" target="_blank" rel="noopener" title="Open full size"><img src="schematic.jpg" alt="Front-end schematic with PGA-103+ LNA and 3-pole bandpass filter" data-ph="KiCad schematic export"></a><figcaption>Schematic (KiCad).</figcaption></figure>
+    <figure><a href="pcb.jpg" target="_blank" rel="noopener" title="Open full size"><img src="pcb.jpg" alt="3D render of the 137 MHz low noise amplifier PCB" data-ph="PCB render or photo"></a><figcaption>PCB 3D render (KiCad).</figcaption></figure>
+
+    <h2>Verifying before fabrication</h2>
+    <p>Real capacitors and inductors are never exactly their labeled value. I ran Monte Carlo tolerance analysis in Qucs to see how the filter response spreads across component tolerances, and cross-checked with AC simulations in LTspice that include parasitics. That way I know the design still works with real parts before paying for boards.</p>
+    <figure><a href="monte-carlo.jpg" target="_blank" rel="noopener" title="Open full size"><img src="monte-carlo.jpg" alt="Monte Carlo simulation of S21 and S11 across component tolerances" data-ph="Qucs Monte Carlo S21 plot"></a><figcaption>Monte Carlo runs in Qucs: S21 (red) and S11 (blue) across component tolerances.</figcaption></figure>
+
+    <h2>Decoding pipeline</h2>
+    <p>The RTL-SDR V4 records raw IQ samples during a satellite pass. A Python decoder takes the recording from IQ samples down to CCSDS packets:</p>
+    <ul>
+      <li><strong>Demodulation:</strong> coarse frequency correction, resampling to 4 samples per symbol, RRC matched filtering (&alpha; = 0.6) and AGC. The top plot shows the filtered signal sitting about &plusmn;55 kHz around center, well above the noise floor.</li>
+      <li><strong>Timing and carrier recovery:</strong> a Gardner loop picks the symbol instants and drops the rate to one sample per symbol, then a QPSK Costas loop tracks the carrier. Its NCO frequency history (middle plot) shows a steady drift, consistent with Doppler shift over the pass. The four tight clusters in the constellation (bottom plot) show both loops locked.</li>
+      <li><strong>Frame sync:</strong> a correlation search for the convolutionally encoded sync word across all four phase rotations and I/Q swap resolves the QPSK phase ambiguity and finds the start of each frame.</li>
+      <li><strong>Channel decoding:</strong> a Viterbi decoder for the rate 1/2, K = 7 convolutional code (compiled with Numba, about 1200&times; faster than CommPy's pure-Python decoder), then CCSDS descrambling and Reed-Solomon (255, 223) error correction.</li>
+      <li><strong>Packet extraction:</strong> the corrected frames are parsed into CCSDS packets and sorted by channel (APID), and image packets are mapped to their row positions in the picture.</li>
+    </ul>
+    <figure><a href="dsp-pipeline.jpg" target="_blank" rel="noopener" title="Open full size"><img src="dsp-pipeline.jpg" alt="IQ spectrum after resampling and RRC filtering, Costas loop NCO frequency history, and a clean four-cluster QPSK constellation" data-ph="DSP pipeline plots"></a><figcaption>Pipeline output: filtered IQ spectrum (top), Costas loop tracking the carrier drift (middle), and the recovered QPSK constellation (bottom).</figcaption></figure>
+
+    <!-- Hidden until the board is built and tested. To show it, move it out of this comment.
+    <h2>Results &amp; lessons</h2>
+    <p>Measured gain / S21 vs. simulation, and the first decoded image.</p>
+    -->
+
+    <h2>What's next</h2>
+    <ul>
+      <li><strong>Finish the image:</strong> implement JPEG decompression of the image data so the received rows become an actual weather picture.</li>
+      <li><strong>Build and test the board:</strong> fabricate the front end, measure its gain and S21, and compare against the Qucs and LTspice simulations.</li>
+      <li><strong>Full system test:</strong> capture a live Meteor-M2 pass through the custom front end and decode it end to end.</li>
+    </ul>
+
+  </article>
+
+</main>
+<script src="../../assets/js/projects.js"></script>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

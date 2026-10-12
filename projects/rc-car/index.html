@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ESP32 Wireless RC Car | Ernesto Ramirez</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<!-- data-project must match this project's "slug" in assets/js/projects.js.
+     The menu, title, intro, tags, GitHub button, next/previous links and footer
+     are all filled in automatically from that entry. -->
+<body data-root="../../" data-project="rc-car">
+<main class="wrap">
+
+  <!-- Key numbers shown as cards under the title. Copy/delete <div class="stat"> blocks as needed. -->
+  <div class="stats"><div class="stat"><div class="v">2-way</div><div class="k">Wireless control + telemetry</div></div><div class="stat"><div class="v">Non-blocking</div><div class="k">Async firmware on both devices</div></div><div class="stat"><div class="v">2 devices</div><div class="k">Car + handheld controller</div></div></div>
+
+  <!-- The write-up. Images live in this same folder, so just use src="photo.jpg". -->
+  <article class="prose">
+
+    <h2>What it does</h2>
+    <p>The controller sends drive, light and siren commands. The car streams back signal strength (RSSI), obstacle alerts from an IR sensor, and light/siren status, all shown on an OLED screen on the controller.</p>
+    <figure><a href="car-and-controller.jpg" target="_blank" rel="noopener" title="Open full size"><img src="car-and-controller.jpg" alt="The ESP32 RC car next to its handheld controller" data-ph="Photo of the car and controller"></a><figcaption>The car (left) and the handheld controller (right) with its joystick and OLED telemetry display.</figcaption></figure>
+
+    <h2>Hardware</h2>
+    <figure><a href="car-schematic.jpg" target="_blank" rel="noopener" title="Open full size"><img src="car-schematic.jpg" alt="Schematic of the RC car: ESP32-C3, H-bridge driving two motors, IR sensor, LEDs and buzzer" data-ph="Car schematic"></a><figcaption>Car: ESP32-C3, H-bridge motor driver, IR obstacle sensor, LEDs and buzzer.</figcaption></figure>
+    <figure><a href="controller-schematic.jpg" target="_blank" rel="noopener" title="Open full size"><img src="controller-schematic.jpg" alt="Schematic of the handheld controller: ESP32-C3 with joystick and OLED" data-ph="Controller schematic"></a><figcaption>Controller: ESP32-C3 with joystick and I²C OLED.</figcaption></figure>
+    <p>All circuitry was breadboarded into a battery-powered prototype: an H-bridge motor driver, LED lighting, a siren, and an IR obstacle sensor.</p>
+
+    <h2>Firmware</h2>
+    <div style="overflow-x:auto"><svg viewBox="0 0 1000 96" role="img" aria-label="Controller to ESP-NOW to Car" style="width:100%;min-width:620px;height:auto;margin:22px 0;font-family:var(--mono)"><defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3ee6a8"/></marker></defs><rect x="0.0" y="14" width="310.7" height="68" rx="8" fill="#131b24" stroke="#2a3a4a"/><text x="155.3" y="42.0" fill="#d8e1ea" font-size="15" text-anchor="middle">Controller</text><text x="155.3" y="64.0" fill="#8a9aab" font-size="12.5" text-anchor="middle">inputs + OLED</text><line x1="313.7" y1="48.0" x2="340.7" y2="48.0" stroke="#3ee6a8" stroke-width="1.8" marker-end="url(#ar)"/><rect x="344.7" y="14" width="310.7" height="68" rx="8" fill="#131b24" stroke="#2a3a4a"/><text x="500.0" y="42.0" fill="#d8e1ea" font-size="15" text-anchor="middle">ESP-NOW</text><text x="500.0" y="64.0" fill="#8a9aab" font-size="12.5" text-anchor="middle">commands ⇄ telemetry</text><line x1="658.3" y1="48.0" x2="685.3" y2="48.0" stroke="#3ee6a8" stroke-width="1.8" marker-end="url(#ar)"/><rect x="689.3" y="14" width="310.7" height="68" rx="8" fill="#131b24" stroke="#2a3a4a"/><text x="844.7" y="42.0" fill="#d8e1ea" font-size="15" text-anchor="middle">Car</text><text x="844.7" y="64.0" fill="#8a9aab" font-size="12.5" text-anchor="middle">motors · lights · IR</text></svg></div>
+    <p>Both devices run asynchronous, non-blocking C/C++ firmware. Wireless reception, motor control and light/siren switching all run without stalling the main loop, so the car keeps responding while telemetry is flowing.</p>
+
+    <h2>In action</h2>
+    <p>A driving test on the floor: the car responds to the controller in real time as it drives forward, turns and changes direction.</p>
+    <figure class="video">
+      <video src="driving.mp4" poster="driving-poster.jpg" autoplay muted loop playsinline controls preload="metadata" aria-label="Video of the ESP32 RC car driving across the floor"></video>
+      <figcaption>Driving test (14 s, loops).</figcaption>
+    </figure>
+
+    <h2>What's next</h2>
+    <ul>
+      <li><strong>Custom PCB:</strong> move the circuitry off the breadboard onto a designed board for the car and the controller.</li>
+      <li><strong>Range testing:</strong> measure how RSSI and packet loss on the ESP-NOW link change with distance and obstacles.</li>
+    </ul>
+
+  </article>
+
+</main>
+<script src="../../assets/js/projects.js"></script>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>
